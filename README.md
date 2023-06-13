@@ -56,7 +56,7 @@
   <summary>4.播放或保存</summary>
 
 使用回车选中一个音频以后 可以选择听或者保存
-![image.png](https://ncstatic.clewm.net/free/2023/0613/10/69b8322a82adc232e9880a54d6fe5a6b.png)
+![image.png](https://ncstatic.clewm.net/free/2023/0613/11/67414394868aa54b719c3c40b6e45204.png)
 
 <details>
   <summary>预览音频 (使用FFPlay播放)</summary>
