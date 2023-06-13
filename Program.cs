@@ -11,7 +11,7 @@ namespace MCSounds
     internal class Program
     {
         private static FandomClient client = new(FandomLanguage.Zh);
-        
+
         private static void PrintInfo()
         {
             ColorConsole.WriteLine("                   ".White().OnRed());
@@ -22,9 +22,10 @@ namespace MCSounds
             ColorConsole.WriteLine();
         }
 
-        private static async Task Wait(string waitWhat, Task task)
+        private static async Task Wait(string waitWhat, Task task, bool clear = true)
         {
-            Console.Clear();
+            if (clear)
+                Console.Clear();
             Console.Write("{0}中", waitWhat);
             while (!task.IsCompleted)
             {
@@ -44,7 +45,7 @@ namespace MCSounds
             Task.WaitAll(Task.Run(async () =>
             {
                 Task<MemoryStream> task = client.GetStreamAsync(url);
-                await Wait("获取音频", task);
+                await Wait("获取音频", task, false);
                 ms = task.Result;
             }));
             return ms!;
@@ -52,7 +53,7 @@ namespace MCSounds
 
         private static bool ShowSound(SoundInfo sound)
         {
-            
+
 
             bool done = false;
             while (!done)
@@ -78,13 +79,14 @@ namespace MCSounds
                     {
                         if (commands[0].ToLower() == "s")
                         {
+                            List<string> downloadList = new();
                             foreach (string idString in commands.Skip(1))
                             {
                                 if (int.TryParse(idString, out var id))
                                 {
                                     if (id >= 0 && id < sound.Urls.Count)
                                     {
-
+                                        downloadList.Add(sound.Urls[id]);
                                     }
                                     else
                                     {
@@ -96,6 +98,72 @@ namespace MCSounds
                                     ErrorUtil.Error("解析音频", string.Format("解析音频ID失败,输入了错误的ID {0}", id));
                                 }
                             }
+                            Console.Clear();
+                            Console.WriteLine("开始下载{0}个文件!", downloadList.Count);
+                            List<string> failUrlList = new();
+                            Dictionary<string, MemoryStream> downDir = new();
+                            foreach (var url in downloadList)
+                            {
+                                ColorConsole.Write(string.Format(" * {0} ", FandomUtil.GetUrlFileName(url)).Green());
+                                using (MemoryStream ms = GetSound(url))
+                                {
+                                    if (ms.Length > 0)
+                                    {
+                                        MemoryStream memoryStream = new();
+                                        ms.CopyTo(memoryStream);
+                                        downDir.Add(url, memoryStream);
+                                    }
+                                    else
+                                    {
+                                        failUrlList.Add(url);
+                                        ColorConsole.Write("失败".Red());
+                                    }
+                                }
+                                Console.WriteLine();
+                            }
+
+                            ColorConsole.WriteLine(" -".Green(), " 获取音频 成功", downDir.Count.ToString().Green(), "个", " 失败", failUrlList.Count.ToString().Red(), "个!");
+
+                            if (downDir.Count == 0)
+                            {
+                                Console.WriteLine("下载任意文件失败,按下任意按键退出...");
+                                Console.ReadKey();
+                                break;
+                            }
+
+                            Console.WriteLine();
+                            Console.WriteLine("开始保存音频");
+
+                            string musicPath = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
+                            string soundPath = Path.Combine(musicPath, FandomUtil.GetSoundName(downDir.Keys.First()));
+
+                            Directory.CreateDirectory(soundPath);
+
+                            foreach (var downSound in downDir)
+                            {
+                                try
+                                {
+                                    string soundFileName = FandomUtil.GetUrlFileName(downSound.Key);
+                                    ColorConsole.Write(string.Format("* {0}", soundFileName).Green());
+                                    string savePath = Path.Combine(soundPath, soundFileName);
+                                    // mp3可以替换为string.Empty 如果为空则是默认后缀输出
+                                    if (FFmpegUtil.SaveSound(downSound.Value, savePath, "mp3"))
+                                        ColorConsole.WriteLine(" done!".Green());
+                                    else
+                                        ColorConsole.WriteLine(" error!".Red());
+                                }
+                                finally
+                                {
+                                    downSound.Value.Dispose();
+                                }
+                            }
+
+
+
+                            Console.WriteLine();
+                            Console.WriteLine("保存到 {0}", soundPath);
+                            Console.Write("按下任意按键返回上级...");
+                            Console.ReadKey(false);
                         }
                         else // 播放音频
                         {
@@ -268,7 +336,14 @@ namespace MCSounds
                     Console.Clear();
                     Task.WaitAll(Task.Run(async () =>
                     {
-                        await Find(key);
+                        try
+                        {
+                            await Find(key);
+                        }
+                        catch (Exception ex)
+                        {
+                            ErrorUtil.Error("未知区域", ex.ToString());
+                        }
                     }));
                 }
             }
