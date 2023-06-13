@@ -1,10 +1,6 @@
-﻿using AngleSharp.Dom;
-using ColoredConsole;
+﻿using ColoredConsole;
 using MCSounds.Fandom;
 using MCSounds.Utils;
-using System.Collections;
-using System.Diagnostics;
-using System.Text.RegularExpressions;
 
 namespace MCSounds
 {

@@ -1,12 +1,9 @@
 ﻿using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
-using AngleSharp.Io;
-using ColoredConsole;
 using MCSounds.Utils;
 using RestSharp;
 using System.Net;
-using System.Security.Cryptography.X509Certificates;
 
 namespace MCSounds.Fandom
 {
@@ -51,7 +48,7 @@ namespace MCSounds.Fandom
         public async Task<List<QueryResult>> Query(string key)
         {
             List<QueryResult> result = new();
-            string path = string.Format("{0}Special:{1}", _baseAddress.ToString(),SearchKey);
+            string path = string.Format("{0}Special:{1}", _baseAddress.ToString(), SearchKey);
             RestRequest request = new(path, Method.Get);
             request.AddQueryParameter("query", key);
             request.AddQueryParameter("scope", "internal");
@@ -74,7 +71,7 @@ namespace MCSounds.Fandom
                             {
                                 string? title = a.GetAttribute("data-title");
                                 string? url = a.GetAttribute("href");
-                                if(!string.IsNullOrEmpty(title) && !string.IsNullOrEmpty(url))
+                                if (!string.IsNullOrEmpty(title) && !string.IsNullOrEmpty(url))
                                 {
                                     result.Add(new(title, url));
                                 }
@@ -83,7 +80,7 @@ namespace MCSounds.Fandom
                     }
 
                 }
-                else if(response.StatusCode == HttpStatusCode.NotFound)
+                else if (response.StatusCode == HttpStatusCode.NotFound)
                 {
                     string errorString = string.Format("找不到{0},请重新搜索!", key);
                     ErrorUtil.Error("搜索请求后", errorString);
@@ -96,7 +93,7 @@ namespace MCSounds.Fandom
             }
             catch (Exception ex)
             {
-                ErrorUtil.Error("搜索",ex.ToString());
+                ErrorUtil.Error("搜索", ex.ToString());
             }
             return result;
         }
@@ -125,7 +122,7 @@ namespace MCSounds.Fandom
                             if (tr != null && tr.TagName.ToLower() == "tr")
                             {
                                 var tds = tr.QuerySelectorAll("td");
-                                if(tds.Count() == 6)
+                                if (tds.Count() == 6)
                                 {
                                     SoundInfo sound = new();
 
@@ -133,7 +130,7 @@ namespace MCSounds.Fandom
                                     sound.Text = tds[1].TextContent;
                                     sound.Type = tds[2].TextContent;
                                     sound.Description = tds[3].TextContent;
-                                    
+
 
                                     var soundSpans = soundTd.QuerySelectorAll("span.sound");
 

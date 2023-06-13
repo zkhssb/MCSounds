@@ -1,6 +1,4 @@
-﻿using System.Collections;
-
-namespace MCSounds.Fandom
+﻿namespace MCSounds.Fandom
 {
     public class SoundInfo
     {

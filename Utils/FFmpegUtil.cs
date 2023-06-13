@@ -1,6 +1,5 @@
 ﻿using ColoredConsole;
 using System.Diagnostics;
-using System.IO;
 
 namespace MCSounds.Utils
 {
@@ -99,7 +98,7 @@ namespace MCSounds.Utils
                 }
 
                 string srcFileName = Path.GetFileNameWithoutExtension(fullPath);
-                string targetFileName = string.Format("{0}.{1}", srcFileName, target??Path.GetExtension(fullPath));
+                string targetFileName = string.Format("{0}.{1}", srcFileName, target ?? Path.GetExtension(fullPath));
                 string savePath = Path.Combine(Path.GetDirectoryName(fullPath) ?? "./", targetFileName);
                 string arguments = string.Format("-y -nostdin -i \"{0}\" \"{1}\"", tempPath, savePath);
 
