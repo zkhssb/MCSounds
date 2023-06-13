@@ -9,9 +9,9 @@
 
 ## 如何使用
 
-- 1.下载并解压 FFmpeg
+- 1.下载并解压 FFmpeg  
   ![image.png](https://ncstatic.clewm.net/free/2023/0613/10/f30241768ff42b08beed9b38f1143a27.png)
-- 2.添加 FFmpeg 的 Bin 目录到系统环境变量(PATH)
+- 2.添加 FFmpeg 的 Bin 目录到系统环境变量(PATH)  
   ![image.png](https://ncstatic.clewm.net/free/2023/0613/10/a4aeb119bf236dc2bbba2245ea59567a.png)
 - 3.打开程序开始使用
 
@@ -55,14 +55,14 @@
 <details>
   <summary>4.播放或保存</summary>
 
-使用回车选中一个音频以后 可以选择听或者保存
-![image.png](https://ncstatic.clewm.net/free/2023/0613/11/67414394868aa54b719c3c40b6e45204.png)
+使用回车选中一个音频以后 可以选择听或者保存  
+![image.png](https://ncstatic.clewm.net/free/2023/0613/11/833b0e8bb894c63aae8fc60253629b47.png)
 
 <details>
   <summary>预览音频 (使用FFPlay播放)</summary>
   
   直接输入数字ID可以预览音频 (使用FFPlay播放)
-![image.png](https://ncstatic.clewm.net/free/2023/0613/10/77d5f361e52304eec2691066573044af.png)
+![image.png](https://ncstatic.clewm.net/free/2023/0613/11/22ac7c2585a76d227949256ddf64c5ed.png)
 </details>
 
 <details>
@@ -112,8 +112,8 @@ private static FandomClient client = new(FandomLanguage.En);
 
 ## 使用到的开源库
 
-| 名称           | 描述            | 地址                                                           |
-| -------------- | --------------- | -------------------------------------------------------------- |
-| RestSharp      | Http 客户端实现 | [Github]("https://github.com/restsharp/RestSharp")             |
-| AngleSharp     | Html 代码解析   | [Github]("https://github.com/AngleSharp/AngleSharp")           |
-| ColoredConsole | 控制台彩色输出  | [Github]("https://github.com/colored-console/colored-console") |
+| 名称           | 描述            | 地址                                               |
+| -------------- | --------------- | -------------------------------------------------- |
+| RestSharp      | Http 客户端实现 | https://github.com/restsharp/RestSharp             |
+| AngleSharp     | Html 代码解析   | https://github.com/AngleSharp/AngleSharp           |
+| ColoredConsole | 控制台彩色输出  | https://github.com/colored-console/colored-console |
