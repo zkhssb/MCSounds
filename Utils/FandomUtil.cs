@@ -17,5 +17,19 @@ namespace MCSounds.Utils
             }
             return fileName;
         }
+        /// <summary>
+        /// 通过URL获取音频名字
+        /// </summary>
+        /// <param name="url">音频路径</param>
+        /// <returns>
+        /// 输入: .../images/b/bc/Villager_idle2.ogg/revision...
+        /// <br/>
+        /// 输出: Villager_idle
+        /// </returns>
+        public static string GetSoundName(string url)
+        {
+            string input = Path.GetFileNameWithoutExtension(GetUrlFileName(url));
+            return Regex.Replace(input, @"\d*\b", "");
+        }
     }
 }
