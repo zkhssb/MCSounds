@@ -92,15 +92,16 @@ namespace MCSounds.Utils
             string tempPath = Path.GetTempFileName();
             try
             {
-                using(FileStream fs = File.OpenWrite(tempPath))
+                using (FileStream fs = new FileStream(tempPath, FileMode.OpenOrCreate))
                 {
-                    ms.CopyTo(fs); // 写音频文件
+                    // ms.CopyTo fs 貌似无法写出?? (不知道为啥
+                    fs.Write(ms.ToArray()); // 写音频文件
                 }
 
-                string srcFileName = Path.GetFileName(fullPath);
+                string srcFileName = Path.GetFileNameWithoutExtension(fullPath);
                 string targetFileName = string.Format("{0}.{1}", srcFileName, target??Path.GetExtension(fullPath));
                 string savePath = Path.Combine(Path.GetDirectoryName(fullPath) ?? "./", targetFileName);
-                string arguments = string.Format("-i '{0}' '{1}'",tempPath, savePath);
+                string arguments = string.Format("-y -nostdin -i \"{0}\" \"{1}\"", tempPath, savePath);
 
                 ProcessStartInfo psi = new ProcessStartInfo(_ffmpegPath, arguments);
                 psi.CreateNoWindow = true;
@@ -108,6 +109,7 @@ namespace MCSounds.Utils
                 psi.RedirectStandardOutput = true;
                 using (Process? process = Process.Start(psi))
                 {
+                    process?.WaitForExit();
                     return process?.ExitCode == 0;
                 }
 
